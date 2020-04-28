@@ -28,6 +28,27 @@ public class WildcardsTest {
     }
 
 
+    static class WildcardError {
+
+        public static void main(String[] args) {
+            List<Integer> li = Arrays.asList(1, 2, 3);
+            List<Double> ld = Arrays.asList(10.10, 20.20, 30.30);
+            swapFirst(li, ld);
+
+            List<Number> le = new ArrayList<>();
+            List<? extends Number> ln = le;
+            ln.add(null);
+            // ln.add(1223); // compile-time error
+        }
+
+        static void swapFirst(List<? extends Number> l1, List<? extends Number> l2) {
+            Number tmp = l1.get(0);
+            //  error   l1.set(0, l2.get(0));
+            //  error   l2.set(0, tmp);
+        }
+    }
+
+
     public static void main(String[] args) {
         /**
          * 1.
@@ -65,6 +86,21 @@ public class WildcardsTest {
         List<Object> li4 = new ArrayList<>();
         addNumber(li4); // ok
 
+
+        /**
+         * 4.通配符捕获
+         */
+        List<?> foo = new ArrayList<>();
+        foo(foo);
+    }
+
+    private static void foo(List<?> i) {
+        // i.add(i.get(0));
+        helpWildcards(i);
+    }
+
+    private static <T> void helpWildcards(List<T> t) {
+        t.add(0, t.get(0));
     }
 
     /**
